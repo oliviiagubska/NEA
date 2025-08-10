@@ -33,26 +33,29 @@ def signup():
 
     return render_template("signup.html")
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        hashed_pw = hashlib.sha256(password.encode()).hexdigest()
+        uname = request.form["username"]
+        pwd = request.form["password"]
 
-        conn = sqlite3.connect("login.db")
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, hashed_pw))
+        hashed_pwd = hashlib.sha256(pwd.encode()).hexdigest()
+
+        con = sqlite3.connect("login.db")
+        cur = con.cursor()
+        cur.execute("SELECT * FROM users WHERE username=? AND password=?", (uname, hashed_pwd))
         user = cur.fetchone()
-        conn.close()
+        con.close()
 
         if user:
-            session["username"] = username
+            session["username"] = uname
             return redirect("/welcome")
         else:
             return "Login failed"
 
-    return render_template("login.html")
+    else:
+        return render_template("login.html")
+
 
 @app.route("/welcome")
 def welcome():

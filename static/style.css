@@ -1,9 +1,10 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #1e1e2f;
+  background-color: #0e0e44; 
   color: white;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: Arial, sans-serif;
+    
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,45 +13,19 @@ body {
   text-align: center;
 }
 
-h1 {
-  color: #d2b9ff;
-  margin-bottom: 20px;
+.welcome-text {
+    font-size: 48px;
+    font-weight: bold;
+    color: #d2b9ff; 
+    margin-bottom: 30px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 300px;
-}
-
-input[type="text"],
-input[type="password"] {
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-input[type="submit"],
 .button {
-  background-color: #ff69b4;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  text-decoration: none;
-  margin-top: 10px;
-}
-
-.button.alt {
-  background-color: #5d3fd3;
-}
-
-a {
-  color: #c3a5ff;
-  margin-top: 10px;
-  text-decoration: none;
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 0 10px;
 }

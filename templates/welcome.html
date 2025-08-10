@@ -2,9 +2,14 @@
 <html>
 <head>
   <title>Welcome</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>Welcome, {{ username }}!</h1>
-  <p><a href="/logout">Log Out</a></p>
+<h1 class="welcome-text">Welcome, {{ username }}</h1>
+<div>
+  <a href="/create_team" class="button">Create a Team</a>
+  <a href="/join_team" class="button purple">Join a Team</a>
+</div>
+<p style="margin-top:18px;"><a href="/logout">Log out</a></p>
 </body>
 </html>
