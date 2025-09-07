@@ -1,215 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Collabsy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
   <style>
-    html, body { height: 100%; margin: 0 }
-    body {
-      background: linear-gradient(135deg, #000000, #d2b9ff);
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 50px;
-      font-family: 'Poppins', sans-serif;
-      color: white;
-    }
-
-    .box {
-      background: rgba(255,255,255,0.08);
-      border: 2px solid rgba(255,255,255,0.6);
-      border-radius: 16px;
-      padding: 22px;
-      width: 520px;
-      max-width: 90%;
-    }
-
-    .info-box { text-align: center; margin-bottom: 26px }
-    .date-text { font-size: 16px; opacity: .85; margin-bottom: 8px }
-    .greeting-text { font-size: 28px; font-weight: 600 }
-
-    .progress-box { margin-bottom: 18px }
-    .progress-title { font-size: 16px; opacity: .9; margin-bottom: 10px }
-    .progress-track {
-      position: relative;
-      width: 100%;
-      height: 22px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.18);
-      overflow: hidden;
-    }
-    .progress-fill {
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: calc({{ done }}% + 0px);
-      background: linear-gradient(90deg, #5d3fd3, #d2b9ff);
-      border-radius: 999px;
-      transition: opacity .35s ease;
-    }
-    .progress-label-single {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12px;
-      font-weight: 600;
-      color: #ffffff;
-      text-shadow: 0 1px 2px rgba(0,0,0,.4);
-      transition: opacity .35s ease;
-    }
-    .segments {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      opacity: 0;
-      transition: opacity .35s ease;
-    }
-    .seg-done {
-      width: {{ done }}%;
-      background: #6ee7b7;
-      display: flex; align-items: center; justify-content: center;
-      color: #103a2d; font-weight: 600; font-size: 12px;
-    }
-    .seg-todo {
-      width: {{ todo }}%;
-      background: #ff9ecf;
-      display: flex; align-items: center; justify-content: center;
-      color: #4c1430; font-weight: 600; font-size: 12px;
-    }
-    .progress-box:hover .progress-fill { opacity: 0 }
-    .progress-box:hover .progress-label-single { opacity: 0 }
-    .progress-box:hover .segments { opacity: 1 }
-
-    .tasks-box { text-align: left; margin-top: 16px }
-    .tasks-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px }
-    .tasks-title { font-size: 18px; font-weight: 600 }
-    .tasks-tabs { display: flex; gap: 16px }
-    .tab { font-size: 14px; color: #cfcfe6; cursor: pointer; position: relative }
-    .tab.active { color: #fff; font-weight: 600 }
-    .tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: #fff }
-
-    .task-item {
-      display: flex; align-items: center; gap: 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.28);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: #fff; font-size: 14px;
-    }
-    .task-check { color: #42d37a; font-size: 16px }
-    .task-text { flex: 1 }
-    .task-date { color: #bdbddb; font-size: 12px }
-
-    .tasks-list.hidden { display: none }
+    .box{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.6);border-radius:16px;padding:22px;width:520px;max-width:90%}
+    .info-box{text-align:center;margin-bottom:26px}
+    .date-t{font-size:16px;opacity:.85;margin-bottom:8px}
+    .greet-t{font-size:28px;font-weight:700}
+    .prog-title{font-size:16px;opacity:.9;margin-bottom:10px}
+    .track{position:relative;width:100%;height:22px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+    .fill{position:absolute;left:0;top:0;bottom:0;width:calc({{ done }}% + 0px);background:linear-gradient(90deg,#5d3fd3,#d2b9ff);border-radius:999px;transition:opacity .35s ease}
+    .single{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600}
+    .segments{position:absolute;inset:0;display:flex;opacity:0;transition:opacity .35s ease}
+    .sd{width:{{ done }}%;background:#6ee7b7;display:flex;align-items:center;justify-content:center;color:#103a2d;font-weight:600;font-size:12px}
+    .st{width:{{ todo }}%;background:#ff9ecf;display:flex;align-items:center;justify-content:center;color:#4c1430;font-weight:600;font-size:12px}
+    .pbox:hover .fill{opacity:0}.pbox:hover .single{opacity:0}.pbox:hover .segments{opacity:1}
+    .tasks{ text-align:left;margin-top:16px}
+    .t-head{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    .t-title{font-size:18px;font-weight:700}
+    .tabs{display:flex;gap:16px}
+    .tab{font-size:14px;color:#cfcfe6;cursor:pointer;position:relative}
+    .tab.active{color:#fff;font-weight:700}
+    .tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:2px;background:#fff}
+    .t-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.28);border-radius:10px;padding:10px 12px;color:#fff;font-size:14px}
+    .tick{color:#42d37a;font-size:16px}
+    .t-text{flex:1}
+    .t-date{color:#bdbddb;font-size:12px}
+    .list.hidden{display:none}
   </style>
 </head>
 <body>
-<div class="top-bar">
-  <div class="left">
+  <div class="top-bar">
     <button class="create-btn">+Create</button>
+    <div class="profile-initials">{{ initials }}</div>
   </div>
-  <div class="right">
-    <div class="profile">{{ initials }}</div>
-  </div>
-</div>
-
-
-  <div class="search-bar">
-    <span class="search-icon">🔎</span>
-    <input type="text" placeholder="Search">
-  </div>
-
-  <div class="top-right">
-    <button class="icon-btn">?</button>
-    <button class="icon-btn">✨</button>
-    <div class="profile">{{ initials }}</div>
-  </div>
-</div>
-
 
   <div class="box info-box">
-    <div class="date-text">{{ date_today }}</div>
-    <div class="greeting-text">{{ greeting }}, {{ username }}!</div>
+    <div class="date-t">{{ date_today }}</div>
+    <div class="greet-t">{{ greeting }}, {{ username }}!</div>
   </div>
 
-  <div class="box progress-box">
-    <div class="progress-title">Overall progress</div>
-    <div class="progress-track">
-      <div class="progress-fill"></div>
-      <div class="progress-label-single">{{ done }}%</div>
+  <div class="box pbox">
+    <div class="prog-title">Overall progress</div>
+    <div class="track">
+      <div class="fill"></div>
+      <div class="single">{{ done }}%</div>
       <div class="segments">
-        <div class="seg-done">{{ done }}% done</div>
-        <div class="seg-todo">{{ todo }}% left</div>
+        <div class="sd">{{ done }}% done</div>
+        <div class="st">{{ todo }}% left</div>
       </div>
     </div>
   </div>
 
-  <div class="box tasks-box">
-    <div class="tasks-head">
-      <div class="tasks-title">My tasks</div>
-      <div class="tasks-tabs">
+{% if teams %}
+<div class="team-box">
+  <div class="team-name">Your teams</div>
+  <ul style="list-style:none;padding:0;margin:10px 0 0">
+    {% for n,c in teams %}
+      <li style="margin:6px 0">{{ n }} — <b>{{ c }}</b></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+
+  <div class="box tasks">
+    <div class="t-head">
+      <div class="t-title">My tasks</div>
+      <div class="tabs">
         <span class="tab active" data-tab="upcoming">Upcoming</span>
         <span class="tab" data-tab="overdue">Overdue (1)</span>
         <span class="tab" data-tab="completed">Completed</span>
       </div>
     </div>
 
-    <div class="tasks-lists">
-      <div class="tasks-list" id="list-upcoming">
-        <div class="task-item">
-          <span class="task-check">✔</span>
-          <span class="task-text">Plan organisational meeting</span>
-          <span class="task-date">Aug 4 – 6</span>
+    <div class="lists">
+      <div class="list" id="upcoming">
+        <div class="t-item">
+          <span class="tick">✔</span>
+          <span class="t-text">Plan organisational meeting</span>
+          <span class="t-date">Aug 4 – 6</span>
         </div>
-        <div class="task-item" style="margin-top:10px">
-          <span class="task-check">✔</span>
-          <span class="task-text">Create team brief</span>
-          <span class="task-date">Aug 10</span>
-        </div>
-      </div>
-
-      <div class="tasks-list hidden" id="list-overdue">
-        <div class="task-item">
-          <span class="task-check">✔</span>
-          <span class="task-text">Submit resource list</span>
-          <span class="task-date">Due Aug 1</span>
+        <div class="t-item" style="margin-top:10px">
+          <span class="tick">✔</span>
+          <span class="t-text">Create team brief</span>
+          <span class="t-date">Aug 10</span>
         </div>
       </div>
 
-      <div class="tasks-list hidden" id="list-completed">
-        <div class="task-item">
-          <span class="task-check">✔</span>
-          <span class="task-text">Set up repository</span>
-          <span class="task-date">Completed Jul 28</span>
+      <div class="list hidden" id="overdue">
+        <div class="t-item">
+          <span class="tick">✔</span>
+          <span class="t-text">Submit resource list</span>
+          <span class="t-date">Due Aug 1</span>
+        </div>
+      </div>
+
+      <div class="list hidden" id="completed">
+        <div class="t-item">
+          <span class="tick">✔</span>
+          <span class="t-text">Set up repository</span>
+          <span class="t-date">Completed Jul 28</span>
         </div>
       </div>
     </div>
   </div>
 
 <script>
-  const tabs = document.querySelectorAll('.tasks-tabs .tab');
+  const tabs = document.querySelectorAll('.tabs .tab')
   const lists = {
-    upcoming: document.getElementById('list-upcoming'),
-    overdue: document.getElementById('list-overdue'),
-    completed: document.getElementById('list-completed')
-  };
-
+    upcoming: document.getElementById('upcoming'),
+    overdue: document.getElementById('overdue'),
+    completed: document.getElementById('completed')
+  }
   tabs.forEach(t => {
     t.addEventListener('click', () => {
-      tabs.forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-
-      const key = t.getAttribute('data-tab');
-      Object.keys(lists).forEach(k => {
-        if (k === key) lists[k].classList.remove('hidden');
-        else lists[k].classList.add('hidden');
-      });
-    });
-  });
+      tabs.forEach(x => x.classList.remove('active'))
+      t.classList.add('active')
+      const k = t.getAttribute('data-tab')
+      Object.keys(lists).forEach(s => {
+        if (s === k) lists[s].classList.remove('hidden')
+        else lists[s].classList.add('hidden')
+      })
+    })
+  })
 </script>
-
 </body>
 </html>

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Home</title>
-  <link rel="stylesheet" href="/static/style.css">
-
+  <title>Collabsy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-  <h1 class="welcome-text">Welcome to Collabsy</h1>
-  <p><a href="/login" class="button">Log In</a> | <a href="/signup" class="button">Sign Up</a></p>
-
+<body class="welcome-body">
+  <div class="welcome-container">
+    <h1 class="welcome-title">Welcome to <span>Collabsy</span></h1>
+    <div class="welcome-buttons">
+      <a href="/login" class="btn">Log In</a>
+      <a href="/signup" class="btn">Sign Up</a>
+    </div>
+  </div>
 </body>
 </html>
-

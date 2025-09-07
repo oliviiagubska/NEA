@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Join Team</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page">
+  <div class="form-box">
+    <h2>Join a Team</h2>
+    {% if error %}<p style="color:#ffb3d5;margin:0 0 10px 0">{{ error }}</p>{% endif %}
+    <form method="post">
+      <input type="text" name="code" placeholder="8-digit code" maxlength="8" pattern="[0-9]{8}" class="field" required>
+      <button type="submit" class="login-btn">Join</button>
+    </form>
+  </div>
+</body>
+</html>

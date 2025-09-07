@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Log In</title>
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-  <h1>Log In</h1>
-  <form method="post">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
-
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
-
-    <input type="submit" value="Log In">
-  </form>
-  <p><a href="/signup">Create a new account</a></p>
+<body class="page">
+  <div class="login-box">
+    <h2>Login</h2>
+    {% if error %}<p style="color:#ffb3d5;margin:0 0 10px 0">{{ error }}</p>{% endif %}
+    <form method="post">
+      <input type="text" name="username" placeholder="Username" class="field" required>
+      <input type="password" name="password" placeholder="Password" class="field" required>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+  </div>
 </body>
 </html>

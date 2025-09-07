@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create Team</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <title>Create Team</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h1>Create a Team</h1>
+<body class="page">
+  <div class="form-box">
+    <h2>Create a Team</h2>
     <form method="post">
-        <label>Team Name:</label><br>
-        <input type="text" name="team_name" required><br><br>
-        <input type="submit" value="Create Team" class="button">
+      <input type="text" name="team_name" placeholder="Team Name" class="field" required>
+      <button type="submit" class="login-btn">Create Team</button>
     </form>
-    <p><a href="/welcome">Back to Dashboard</a></p>
+  </div>
 </body>
 </html>
