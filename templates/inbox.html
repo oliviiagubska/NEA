@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Inbox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #34386e;
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+    }
+
+    .layout {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #2c3162;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .sidebar-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .member-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .member-pill {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #e5e7eb;
+      font-size: 14px;
+      background: rgba(15,23,42,0.4);
+      border: 1px solid transparent;
+      transition: background 0.2s, border 0.2s, transform 0.1s;
+    }
+
+    .member-pill:hover {
+      background: rgba(236,72,153,0.35);
+      border-color: rgba(236,72,153,0.8);
+      transform: translateY(-1px);
+    }
+
+    .member-pill.active {
+      background: #ec4899;
+      border-color: #f9a8d4;
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .chat-header {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      font-size: 15px;
+    }
+
+    .chat-header a {
+      color: #e5e7eb;
+      text-decoration: none;
+      margin-right: 14px;
+      font-size: 13px;
+    }
+
+    .chat-header a:hover {
+      text-decoration: underline;
+    }
+
+    .chat-title {
+      font-weight: 600;
+    }
+
+    .chat-subtitle {
+      margin-left: 8px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 20px 24px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .msg-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .msg-row.mine {
+      justify-content: flex-end;
+    }
+
+    .msg-row.theirs {
+      justify-content: flex-start;
+    }
+
+    .msg-bubble {
+      max-width: 55%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .msg-row.mine .msg-bubble {
+      background: #ec4899;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-row.theirs .msg-bubble {
+      background: #4b4f8c;
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg-meta {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .msg-text {
+      word-wrap: break-word;
+    }
+
+
+    .chat-input {
+      padding: 10px 18px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      gap: 10px;
+      box-sizing: border-box;
+    }
+
+    .chat-input input[type="text"] {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #ff5fb1;
+      color: white;
+      transition: background 0.2s;
+    }
+
+    .chat-input button:hover {
+      background: #ff7ac3;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <div class="sidebar">
+      <div class="sidebar-title">Members</div>
+      <div class="member-list">
+        <a href="{{ url_for('inbox') }}"
+           class="member-pill {% if not chat_with %}active{% endif %}">
+          Team inbox
+        </a>
+
+        {% for m in members %}
+          <a href="{{ url_for('inbox') }}?with={{ m }}"
+             class="member-pill {% if chat_with == m %}active{% endif %}">
+            {{ m }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+                
+    <div class="main">
+      <div class="chat-header">
+        <a href="{{ url_for('app_home') }}">← Back to dashboard</a>
+        <div class="chat-title">
+          {% if chat_with %}
+            Chat with {{ chat_with }}
+          {% else %}
+            Team Inbox
+          {% endif %}
+        </div>
+        <div class="chat-subtitle">
+          Logged in as {{ username }}
+        </div>
+      </div>
+
+      <div class="chat-body">
+        {% if messages %}
+          {% for sender, recipient, content in messages %}
+            <div class="msg-row {% if sender == username %}mine{% else %}theirs{% endif %}">
+              <div class="msg-bubble">
+                <div class="msg-meta">
+                  {{ sender }}
+                  {% if recipient %}
+                    → {{ recipient }}
+                  {% endif %}
+                </div>
+                <div class="msg-text">
+                  {{ content }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p style="opacity:0.8; font-size:14px;">No messages yet. Start the conversation!</p>
+        {% endif %}
+      </div>
+
+      <form method="POST" class="chat-input">
+        <input type="hidden" name="recipient" value="{{ chat_with or '' }}">
+        <input type="text" name="message" placeholder="Type a message..." autocomplete="off">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>

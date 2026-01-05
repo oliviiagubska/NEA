@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Projects & Tasks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="projects-page">
+  <h1 class="projects-title">Projects & Tasks</h1>
+  <p class="projects-sub">Manage what your team is working on.</p>
+
+  <div class="projects-layout">
+    <div class="members-panel">
+      <h3>Team members</h3>
+
+      <ul class="member-list">
+        {% for m in members %}
+          <li>{{ m }}</li>
+        {% endfor %}
+      </ul>
+
+      {% if projects %}
+      <form method="POST" action="/projects/{{ projects[0].id }}/add_member" class="simple-form">
+        <input type="text" name="username" placeholder="Add member by username">
+        <button class="btn-small" type="submit">Add</button>
+      </form>
+      {% endif %}
+    </div>
+
+    
+    <div class="projects-panel">
+      <h3>Your projects</h3>
+
+      <form method="POST" action="/projects/create" class="project-create">
+        <input type="text" name="name" placeholder="New project name">
+        <button class="btn-small" type="submit">Create project</button>
+      </form>
+
+      {% for p in projects %}
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">{{ p.name }}</div>
+          <div class="project-owner">Owner: {{ p.owner }}</div>
+        </div>
+
+        <ul class="task-list">
+          {% for t in p.tasks %}
+          <li class="task-item">
+            <span class="task-title">{{ t.title }}</span>
+            <span class="task-status 
+                         {% if t.status == 'Todo' %}status-todo
+                         {% elif t.status == 'Doing' %}status-doing
+                         {% else %}status-done{% endif %}">
+              {{ t.status }}
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <form method="POST" action="/create_task" class="task-form">
+          <input type="hidden" name="project_id" value="{{ p.id }}">
+          <input type="text" name="title" placeholder="New task title">
+          <textarea name="description" placeholder="Optional description"></textarea>
+          <button class="btn-small" type="submit">Add task</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

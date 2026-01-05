@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team members</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page-members">
+  <div class="members-card">
+    <div class="members-header">
+      <h1>{{ team.name }}</h1>
+      <p>Invite code: <strong>{{ team.code }}</strong></p>
+    </div>
+
+    <h2 class="members-title">Team members</h2>
+
+    {% if members %}
+      <ul class="members-list">
+        {% for m in members %}
+          <li class="member-row">
+            <div class="member-avatar">{{ m[0]|upper }}</div>
+            <div class="member-info">
+              <div class="member-name">
+                {{ m }}
+                {% if m == team.owner %}<span class="member-tag">Owner</span>{% endif %}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="members-empty">No members yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('app_home') }}" class="back-link">Back to dashboard</a>
+  </div>
+</body>
+</html>

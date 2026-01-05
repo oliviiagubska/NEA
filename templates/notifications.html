@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notifications</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="notif-page">
+  <div class="notif-header">
+    <div>
+      <h1 class="notif-title">Notifications</h1>
+      <p class="notif-sub">See what needs your attention in the team.</p>
+    </div>
+
+    <a href="/app" class="notif-back">Back to dashboard</a>
+  </div>
+
+  <div class="notif-card">
+    {% if notifications %}
+      <ul class="notif-list">
+        {% for n in notifications %}
+        <li class="notif-item">
+          <div class="notif-main">{{ n.text }}</div>
+          <div class="notif-meta">{{ n.time }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="notif-empty">
+        <h3>All clear</h3>
+        <p>You have no notifications right now. New alerts about tasks or team activity will appear here.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+</body>
+</html>
