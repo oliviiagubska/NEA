@@ -11,10 +11,13 @@ def create_tables():
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
-        username TEXT PRIMARY KEY,
-        password TEXT NOT NULL
-    );
-    """)
+       username TEXT PRIMARY KEY,
+       password TEXT NOT NULL,
+       failed_attempts INTEGER NOT NULL DEFAULT 0,
+       locked_until TEXT
+   );
+   """)
+
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS teams (
