@@ -15,12 +15,13 @@ def db():
 
 @app.route("/view_users")
 def view_users():
-    con = sqlite3.connect("login.db")
+    con = db()
     cur = con.cursor()
     cur.execute("SELECT * FROM users")
     rows = cur.fetchall()
     con.close()
     return str(rows)
+
 
 @app.route("/")
 def home():
@@ -594,11 +595,6 @@ def notifications():
     return render_template("notifications.html",
                            username=u,
                            notifications=notifications)
-
-
-
-
-
 
 
 if __name__ == "__main__":
