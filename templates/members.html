@@ -1,38 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Team members</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!--page title-->
+  <title>Members</title>
+
+  <!--link to shared css-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="page-members">
-  <div class="members-card">
-    <div class="members-header">
-      <h1>{{ team.name }}</h1>
-      <p>Invite code: <strong>{{ team.code }}</strong></p>
+
+<body class="members-page-body">
+
+  <!--back to dashboard link-->
+  <div class="members-back-wrapper">
+    <a href="/app" class="members-back-link">
+      ← Back to Dashboard
+    </a>
+  </div>
+
+  <!--main container-->
+  <div class="members-container">
+
+    <!--team title-->
+    <h1>Your team:</h1>
+    <h2>{{ team_name }}</h2>
+
+    <!--members list-->
+    <div class="members-list">
+
+      <!--team owner-->
+      <div class="members-item owner">
+        {{ owner }} (Owner)
+      </div>
+
+      <!--team members-->
+      {% for m in members %}
+        {% if m != owner %}
+          <div class="members-item">
+            {{ m }}
+          </div>
+        {% endif %}
+      {% endfor %}
+
     </div>
 
-    <h2 class="members-title">Team members</h2>
-
-    {% if members %}
-      <ul class="members-list">
-        {% for m in members %}
-          <li class="member-row">
-            <div class="member-avatar">{{ m[0]|upper }}</div>
-            <div class="member-info">
-              <div class="member-name">
-                {{ m }}
-                {% if m == team.owner %}<span class="member-tag">Owner</span>{% endif %}
-              </div>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="members-empty">No members yet.</p>
-    {% endif %}
-
-    <a href="{{ url_for('app_home') }}" class="back-link">Back to dashboard</a>
   </div>
+
 </body>
 </html>

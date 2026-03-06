@@ -1,75 +1,269 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--page title-->
   <title>Projects & Tasks</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!--link to shared css file-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-<div class="projects-page">
-  <h1 class="projects-title">Projects & Tasks</h1>
-  <p class="projects-sub">Manage what your team is working on.</p>
+<body class="projects-page-body">
 
-  <div class="projects-layout">
-    <div class="members-panel">
-      <h3>Team members</h3>
+  <!--main page container-->
+  <div class="projects-page">
 
-      <ul class="member-list">
-        {% for m in members %}
-          <li>{{ m }}</li>
-        {% endfor %}
-      </ul>
-
-      {% if projects %}
-      <form method="POST" action="/projects/{{ projects[0].id }}/add_member" class="simple-form">
-        <input type="text" name="username" placeholder="Add member by username">
-        <button class="btn-small" type="submit">Add</button>
-      </form>
-      {% endif %}
+    <!--back to dashboard sign-->
+    <div class="projects-back-wrapper">
+      <a href="/app" class="projects-back-link">
+        ← Back to Dashboard
+      </a>
     </div>
 
-    
-    <div class="projects-panel">
-      <h3>Your projects</h3>
+    <!--page heading-->
+    <h1 class="projects-title">Projects & Tasks</h1>
+    <p class="projects-sub">Manage what your team is working on.</p>
 
-      <form method="POST" action="/projects/create" class="project-create">
-        <input type="text" name="name" placeholder="New project name">
-        <button class="btn-small" type="submit">Create project</button>
-      </form>
+    <div class="projects-layout">
 
-      {% for p in projects %}
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">{{ p.name }}</div>
-          <div class="project-owner">Owner: {{ p.owner }}</div>
-        </div>
+      <!--team members panel-->
+      <div class="projects-members-panel">
+        <h3>Team members</h3>
 
-        <ul class="task-list">
-          {% for t in p.tasks %}
-          <li class="task-item">
-            <span class="task-title">{{ t.title }}</span>
-            <span class="task-status 
-                         {% if t.status == 'Todo' %}status-todo
-                         {% elif t.status == 'Doing' %}status-doing
-                         {% else %}status-done{% endif %}">
-              {{ t.status }}
-            </span>
-          </li>
+        <!--list of team members-->
+        <ul class="projects-member-list">
+          {% for m in members %}
+            <li class="projects-member-item">{{ m }}</li>
           {% endfor %}
         </ul>
-
-        <form method="POST" action="/create_task" class="task-form">
-          <input type="hidden" name="project_id" value="{{ p.id }}">
-          <input type="text" name="title" placeholder="New task title">
-          <textarea name="description" placeholder="Optional description"></textarea>
-          <button class="btn-small" type="submit">Add task</button>
-        </form>
       </div>
-      {% endfor %}
+
+      <!--projects panel-->
+      <div class="projects-panel">
+
+        <!--owner only create project-->
+        {% if role == "owner" %}
+          <h3>Create a project</h3>
+
+          <form method="POST" action="/projects/create" class="project-create">
+
+            <!--project title-->
+            <input
+              type="text"
+              name="name"
+              placeholder="Project title"
+              maxlength="50"
+              required
+              class="projects-field"
+            >
+
+            <!--project description-->
+            <textarea
+              name="description"
+              placeholder="Project description (optional)"
+              class="projects-textarea"
+            ></textarea>
+
+            <!--submit-->
+            <button type="submit" class="btn-small">Create project</button>
+          </form>
+        {% endif %}
+
+        <h3 class="projects-section-title">Your projects</h3>
+
+        {% for p in projects %}
+          <!--single project-->
+          <details class="project-card" open>
+
+            <!--project summary-->
+            <summary class="project-summary">
+              <div class="project-summary-left">
+                <div class="project-name">{{ p.name }}</div>
+
+                {% if p.description %}
+                  <div class="project-desc">{{ p.description }}</div>
+                {% endif %}
+              </div>
+
+              <div class="project-summary-right">
+                <div class="project-owner">Owner: {{ p.owner }}</div>
+
+                <!--delete project owner only-->
+                {% if role == "owner" %}
+                  <form
+                    method="POST"
+                    action="/projects/{{ p.id }}/delete"
+                    class="inline-form"
+                    onsubmit="return confirm('Delete this project and ALL its tasks?');"
+                  >
+                    <button type="submit" class="btn-small danger-btn">Delete project</button>
+                  </form>
+                {% endif %}
+              </div>
+            </summary>
+
+            <!--project body-->
+            <div class="project-body">
+
+              <!--tasks list-->
+              <ul class="task-list">
+                {% for t in p.tasks %}
+                  <li class="task-item">
+
+                    <div class="task-left">
+
+                      <!--task title and deadline-->
+                      <div class="task-top">
+                        <span class="task-title">{{ t.title }}</span>
+
+                        {% if t.days_left is not none %}
+                          <span class="task-deadline
+                            {% if t.days_left < 1 %}deadline-red
+                            {% elif t.days_left < 5 %}deadline-yellow
+                            {% else %}deadline-green{% endif %}">
+                            {% if t.days_left < 0 %}
+                              Overdue ({{ t.days_left * -1 }} day(s))
+                            {% else %}
+                              {{ t.days_left }} day(s) left
+                            {% endif %}
+                          </span>
+                        {% endif %}
+                      </div>
+
+                      <!--task status and assignees-->
+                      <div class="task-bottom">
+                        <span class="task-status {% if t.status == 'Done' %}status-done{% else %}status-todo{% endif %}">
+                          {{ t.status }}
+                        </span>
+
+                        {% if t.assignees %}
+                          <span class="task-assignees">
+                            members assigned:
+                            {% for a, completed in t.assignees %}
+                              <span class="assignee-pill {% if completed == 1 %}assignee-done{% endif %}">
+                                {{ a }}
+                              </span>
+                            {% endfor %}
+                          </span>
+                        {% endif %}
+                      </div>
+
+                      <!--task description-->
+                      {% if t.description %}
+                        <div class="task-desc">{{ t.description }}</div>
+                      {% endif %}
+
+                    </div>
+
+                    <!--task actions-->
+                    <div class="task-actions">
+
+                      <!--mark as done only if this user is assigned and not completed-->
+                      {% for a, completed in t.assignees %}
+                        {% if a == username and completed == 0 %}
+                          <form method="POST" action="/tasks/{{ t.id }}/done" class="inline-form">
+                            <button class="btn-small" type="submit">Mark as done</button>
+                          </form>
+                        {% endif %}
+                      {% endfor %}
+
+                      <!--delete task owner only-->
+                      {% if role == "owner" %}
+                        <form
+                          method="POST"
+                          action="/tasks/{{ t.id }}/delete"
+                          class="inline-form"
+                          onsubmit="return confirm('Delete this task?');"
+                        >
+                          <button type="submit" class="btn-small danger-btn">Delete</button>
+                        </form>
+                      {% endif %}
+
+                    </div>
+
+                  </li>
+                {% endfor %}
+              </ul>
+
+              <!--owner only create task-->
+              {% if role == "owner" %}
+                <form method="POST" action="/create_task" class="task-form">
+
+                  <!--project id-->
+                  <input type="hidden" name="project_id" value="{{ p.id }}">
+
+                  <!--task title-->
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Task title"
+                    minlength="3"
+                    maxlength="50"
+                    required
+                    class="projects-field"
+                  >
+
+                  <!--task description-->
+                  <textarea
+                    name="description"
+                    placeholder="Task description (optional)"
+                    class="projects-textarea"
+                  ></textarea>
+
+                  <!--due date num2-->
+                  <input type="date" name="date_due" min="{{ today }}" required class="projects-field">
+
+                  <!--assignees-->
+                  <label class="small-label">assign to</label>
+
+                  <select
+                    name="assignees"
+                    multiple
+                    required
+                    class="assignees-select"
+                    onchange="updateSelected({{ p.id }})"
+                    id="assignees-{{ p.id }}"
+                  >
+                    {% for m in members %}
+                      <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                  </select>
+
+                  <!--selected preview-->
+                  <div class="selected-preview" id="selected-preview-{{ p.id }}">
+                    members assigned: <span class="selected-names">none</span>
+                  </div>
+
+                  <!--submit-->
+                  <button class="btn-small" type="submit">Add task</button>
+                </form>
+              {% endif %}
+
+            </div>
+          </details>
+        {% endfor %}
+
+      </div>
     </div>
   </div>
-</div>
+
+  <!--js to show selected assignees-->
+  <script>
+  function updateSelected(projectId){
+    const sel = document.getElementById("assignees-" + projectId);
+    const wrap = document.getElementById("selected-preview-" + projectId);
+    const out = wrap.querySelector(".selected-names");
+
+    let names = [];
+    for (let i = 0; i < sel.options.length; i++){
+      if (sel.options[i].selected){
+        names.push(sel.options[i].value);
+      }
+    }
+
+    out.textContent = names.length ? names.join(", ") : "none";
+  }
+  </script>
 
 </body>
 </html>

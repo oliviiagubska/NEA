@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--page title-->
   <title>Welcome</title>
+
+  <!--shared css file-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="page">
+
+<body class="welcome-page">
+
+  <!--main welcome container-->
   <div class="welcome-box">
-    <h2>Welcome, {{ username }}</h2>
-  <div class="welcome-buttons">
-    <a href="/create_team" class="btn">Create a Team</a>
-    <a href="/join_team" class="btn">Join a Team</a>
+
+    <!--welcome message-->
+    <h2 class="welcome-title">Welcome, {{ username }}</h2>
+
+    <!--main action buttons-->
+    <div class="welcome-buttons">
+      <a href="/create_team" class="primary-btn">Create a Team</a>
+      <a href="/join_team" class="primary-btn">Join a Team</a>
+    </div>
+
+
+    <!--logout link-->
+    <a href="/logout" class="logout-link">Log out</a>
+
   </div>
 
-   <a href="/logout" class="logout-btn">Log out</a>
-  </div>
 </body>
 </html>

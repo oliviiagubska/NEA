@@ -1,40 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Notifications</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
 
-<div class="notif-page">
-  <div class="notif-header">
-    <div>
+  <!--page title-->
+  <title>Notifications</title>
+
+  <!--main shared stylesheet-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="notif-page-body">
+
+  <!--main page container-->
+  <div class="notif-page">
+
+    <!--header section with title and back button-->
+    <div class="notif-header">
+
+      <!--page heading-->
       <h1 class="notif-title">Notifications</h1>
-      <p class="notif-sub">See what needs your attention in the team.</p>
+
+      <!--back to dashboard link-->
+      <a href="/app" class="notif-back-link">
+        ← Back to Dashboard
+      </a>
+
     </div>
 
-    <a href="/app" class="notif-back">Back to dashboard</a>
-  </div>
+    <!--card that holds notifications content-->
+    <div class="notif-card">
 
-  <div class="notif-card">
-    {% if notifications %}
-      <ul class="notif-list">
-        {% for n in notifications %}
-        <li class="notif-item">
-          <div class="notif-main">{{ n.text }}</div>
-          <div class="notif-meta">{{ n.time }}</div>
-        </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <div class="notif-empty">
-        <h3>All clear</h3>
-        <p>You have no notifications right now. New alerts about tasks or team activity will appear here.</p>
-      </div>
-    {% endif %}
+      <!--check if there are any notifications-->
+      {% if notifications %}
+
+        <!--list of notifications-->
+        <ul class="notif-list">
+          {% for n in notifications %}
+            <li class="notif-item">
+
+              <!--notification text-->
+              <div class="notif-main">
+                {{ n.text }}
+              </div>
+
+              <!--notification time-->
+              <div class="notif-meta">
+                {{ n.time }}
+              </div>
+
+            </li>
+          {% endfor %}
+        </ul>
+
+      {% else %}
+
+        <!--message shown when there are no notifications-->
+        <div class="notif-empty">
+          <h3>No notifications</h3>
+        </div>
+
+      {% endif %}
+
+    </div>
+
   </div>
-</div>
 
 </body>
 </html>

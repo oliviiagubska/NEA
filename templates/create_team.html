@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--page title-->
   <title>Create Team</title>
+
+  <!--link to shared css file-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body class="page">
+
+  <!--main form container-->
   <div class="form-box">
+
+    <!--page heading-->
     <h2>Create a Team</h2>
+
+    <!--show error message if something goes wrong-->
+    {% if error %}
+      <p class="error-text">{{ error }}</p>
+    {% endif %}
+
+    <!--team creation form-->
     <form method="post">
-      <input type="text" name="team_name" placeholder="Team Name" class="field" required>
+
+      <!--input for team name-->
+      <input type="text" name="team_name" placeholder="Team Name" class="field" required maxlength="50">
+
+      <!--submit button-->
       <button type="submit" class="login-btn">Create Team</button>
+
     </form>
+
+    <!--back link for user navigation-->
+    <p class="muted-text">
+      <a href="/welcome" class="link">Back</a>
+    </p>
+
   </div>
+
 </body>
 </html>

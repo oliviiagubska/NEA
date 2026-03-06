@@ -1,16 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--page title-->
   <title>Join Team</title>
+
+  <!--link to shared css file-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body class="page">
+
+  <!--main form container-->
   <div class="form-box">
+
+    <!--page heading-->
     <h2>Join a Team</h2>
+
+    <!--display error message if code is invalid-->
+    {% if error %}
+      <p class="error">
+        {{ error }}
+      </p>
+    {% endif %}
+
+    <!--join team form-->
     <form method="post">
-      <input type="text" name="code" placeholder="8-digit code" maxlength="8" pattern="[0-9]{8}" class="field" required>
+
+      <!--invite code input (8 hexadecimal characters)-->
+      <input
+        type="text"
+        name="code"
+        placeholder="Enter invite code"
+        maxlength="8"
+        pattern="[A-Fa-f0-9]{8}"
+        class="field"
+        required
+      >
+
+      <!--submit button-->
       <button type="submit" class="login-btn">Join</button>
+
     </form>
+
+    <!--back navigation-->
+    <p class="muted-text">
+      <a href="/welcome" class="link">Back</a>
+    </p>
+
   </div>
+
 </body>
 </html>

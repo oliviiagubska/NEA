@@ -1,18 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--page title-->
   <title>Sign Up</title>
+
+  <!--shared css file-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body class="page">
+
+  <!--main signup container-->
   <div class="login-box">
+
+    <!--page heading-->
     <h2>Sign Up</h2>
-    {% if error %}<p style="color:#ffb3d5;margin:0 0 10px 0">{{ error }}</p>{% endif %}
+
+    <!--error message-->
+    {% if error %}
+      <p class="error-text">
+        {{ error }}
+      </p>
+    {% endif %}
+
+    <!--signup form-->
     <form method="post">
-      <input type="text" name="username" placeholder="Username" class="field" required>
-      <input type="password" name="password" placeholder="Password" class="field" required>
+
+      <!--username input-->
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        class="field"
+        autocomplete="username"
+        required
+      >
+
+      <!--password input-->
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        class="field"
+        autocomplete="new-password"
+        required
+      >
+
+      <!--submit button-->
       <button type="submit" class="login-btn">Create account</button>
+
     </form>
+
+    <!--link to login page-->
+      <a href="/login" class="link">Log in</a>
+    </p>
+
   </div>
+
 </body>
 </html>
